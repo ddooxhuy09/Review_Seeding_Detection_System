@@ -1,0 +1,4 @@
+Flask
+Flask-WTF
+undetected-playwright-patch
+playwright==1.40.0

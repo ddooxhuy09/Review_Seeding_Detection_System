@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URL Input</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+    {% extends 'base.html' %}
+
+    {% block title %}URL Input - Flask URL App{% endblock %}
+
+    {% block content %}
+    <div class="container">
+        <h1>Nhập URL để mở bằng Browser Automation</h1>
+        <p style="text-align: center; color: #666; margin-bottom: 30px;">
+            URL sẽ được gửi đến Shopee/browser_automation.py để xử lý
+        </p>
+
+        <!-- Hiển thị thông báo flash -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        <div class="flash-messages">
+            {% for category, message in messages %}
+            <div class="alert alert-{{ 'success' if category == 'success' else 'danger' }}">
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% endwith %}
+
+        <form method="POST" id="urlForm">
+            {{ form.hidden_tag() }}
+            <div class="form-group">
+                {{ form.url.label(class="form-label") }}
+                {{ form.url(class="form-control", placeholder="Ví dụ: google.com hoặc https://google.com") }}
+                {% if form.url.errors %}
+                <div class="text-danger">
+                    {% for error in form.url.errors %}
+                    <small>{{ error }}</small>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+            <div class="button-group">
+                <button type="submit" class="btn btn-primary">Mở URL bằng Playwright</button>
+            </div>
+        </form>
+
+        <!-- Loading indicator -->
+        <div id="loading" style="display: none; text-align: center; margin-top: 20px;">
+            <p>Đang gửi URL đến browser automation...</p>
+            <div class="spinner"></div>
+        </div>
+    </div>
+
+    <script>
+        // Hiển thị loading khi submit form
+        document.getElementById('urlForm').addEventListener('submit', function () {
+            document.getElementById('loading').style.display = 'block';
+        });
+    </script>
+    {% endblock %}
+</body>
+
+</html>
